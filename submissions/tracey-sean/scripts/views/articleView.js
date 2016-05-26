@@ -13,6 +13,13 @@
   };
 
   // COMMENT: What does this method do?  What is it's execution path?
+  //articleView object calls the populateFilters method and creates local vars
+  // options and template.  template compiles handlebars associated with option-template id.
+  //var options maps allAuthors, and returns the author handlebar to the option-template
+  // IF it doesn't already exist.
+  //the same happens for allCategories, appending to the category-filter id IF it doesn't exist already
+  //note:  allAuthors is called manipulating the DOM.
+  //note:  allCategories is called using SQL-based approach, so its independent of DOM.
   articleView.populateFilters = function() {
     var options,
       template = Handlebars.compile($('#option-template').text());
@@ -38,6 +45,11 @@
   };
 
   // COMMENT: What does this method do?  What is it's execution path?
+  //articleView object calls the handleFilters method.  when a filter is selected
+  //when either author or category filter is selected, page() method from routes.js is filled in
+  //with the var resource, which is assigned to be either author or category based on the selection.
+  //regex is used to change out all whitespace with +.
+  //page('/{name of filter, either author category}/{value selected, either actual author name of specific category selected}')
   articleView.handleFilters = function() {
     $('#filters').one('change', 'select', function() {
       resource = this.id.replace('-filter', '');
@@ -118,6 +130,12 @@
   };
 
   // COMMENT: What does this method do?  What is it's execution path?
+  //articleView object calls the index method, which shows the articles id section,
+  //and hides all other siblings.  it then runs forEach based on the argument passed in
+  //and dynamically renders and appends the articles to the article id.
+  //so the filters are shown, the articles are hidden, and the filters are populated
+  //then the handlefilters is called, which populates whatever category or author selected.
+  //if the article is to be shown, it hides the article except the first 2 tags.
   articleView.index = function(articles) {
     $('#articles').show().siblings().hide();
 
@@ -128,6 +146,8 @@
 
     articleView.populateFilters();
     // COMMENT: What does this method do?  What is it's execution path?
+    //this method handleFilters calls the filters once a change is selected,
+    //such as selecting a new author or category.
     articleView.handleFilters();
 
     // DONE: Replace setTeasers with just the truncation logic, if needed:
